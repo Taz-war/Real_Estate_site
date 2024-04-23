@@ -1,3 +1,4 @@
+import BasicCard from "@/components/ui/CardList";
 import Image from "next/image";
 
 export default function Home() {

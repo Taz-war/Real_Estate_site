@@ -1,42 +1,34 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import { Grid, Card, CardActions, CardContent, CardMedia, Button, Typography } from '@mui/material';
+import properties from '@/data/SiteLists.json'
 
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-  >
-    •
-  </Box>
-);
-
-export default function BasicCard() {
+export default function ImgMediaCard() {
   return (
-    <Card sx={{ minWidth: 275 }}>
-      <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Word of the Day
-        </Typography>
-        <Typography variant="h5" component="div">
-          be{bull}nev{bull}o{bull}lent
-        </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          adjective
-        </Typography>
-        <Typography variant="body2">
-          well meaning and kindly.
-          <br />
-          {'"a benevolent smile"'}
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions>
-    </Card>
+    <Grid container spacing={4}>
+      {properties.map((property) => (
+        <Grid item key={property.id} xs={12} sm={6} md={4}>
+          <Card sx={{ maxWidth: 345 }}>
+            <CardMedia
+              component="img"
+              alt="Property Image"
+              height="140"
+              image={property.photo}
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                {property.location}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Price: {property.price} - {property.measurements}
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button size="small">View More</Button>
+              <Button size="small">Contact Agent</Button>
+            </CardActions>
+          </Card>
+        </Grid>
+      ))}
+    </Grid>
   );
 }
