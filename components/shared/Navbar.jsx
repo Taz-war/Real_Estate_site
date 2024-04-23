@@ -1,3 +1,4 @@
+"use client"
 import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -16,9 +17,16 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import StarIcon from '@mui/icons-material/Star';
+import EmailIcon from '@mui/icons-material/Email';
+import DraftsIcon from '@mui/icons-material/Drafts';
+import SendIcon from '@mui/icons-material/Send';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ReportIcon from '@mui/icons-material/Report';
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -117,60 +125,59 @@ export default function NavBar() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography>Main Categories</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <List>
+                {[
+                  { text: 'Starred', icon: <StarIcon /> },
+                  { text: 'Send email', icon: <SendIcon /> }
+                ].map((item, index) => (
+                  <ListItem key={index} disablePadding>
+                    <ListItemButton>
+                      <ListItemIcon>{item.icon}</ListItemIcon>
+                      <ListItemText primary={item.text} />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+              </List>
+            </AccordionDetails>
+          </Accordion>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel2a-content"
+              id="panel2a-header"
+            >
+              <Typography>Other Options</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <List>
+                {[
+                  { text: 'Drafts', icon: <DraftsIcon /> },
+                  { text: 'Trash', icon: <DeleteIcon /> },
+                  { text: 'Spam', icon: <ReportIcon /> }
+                ].map((item, index) => (
+                  <ListItem key={index} disablePadding>
+                    <ListItemButton>
+                      <ListItemIcon>{item.icon}</ListItemIcon>
+                      <ListItemText primary={item.text} />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+              </List>
+            </AccordionDetails>
+          </Accordion>
         </List>
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-          enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-          imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-          Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-          Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-          nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-          leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-          feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-          consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-          sapien faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
-          eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
-          neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
-          tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis
-          sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
-          tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit
-          gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-          et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-          tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
       </Main>
     </Box>
   );
