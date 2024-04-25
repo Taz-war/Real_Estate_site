@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { Grid, Card, CardActions, CardContent, CardMedia, Button, Typography, TextField, Box } from '@mui/material';
+import { Grid, Card, CardActions, CardContent, CardMedia, Button, Typography, TextField, Box, Pagination } from '@mui/material';
 import properties from '@/data/SiteLists.json';
 
 export default function ImgMediaCard() {
@@ -10,6 +10,8 @@ export default function ImgMediaCard() {
   const [toPriceFilter, setToPriceFilter] = useState('');
   const [addressSearch, setAddressSearch] = useState('');
   const [addressSearchTerm, setAddressSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(6);
   const [filteredProperties, setFilteredProperties] = useState(properties);
 
   useEffect(() => {
@@ -56,29 +58,47 @@ export default function ImgMediaCard() {
       );
     });
     setFilteredProperties(results);
+    setCurrentPage(1); // Reset to first page when filters change
   };
+
+  const lastItemIndex = currentPage * itemsPerPage;
+  const firstItemIndex = lastItemIndex - itemsPerPage;
+  const currentItems = filteredProperties.slice(firstItemIndex, lastItemIndex);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const pageCount = Math.ceil(filteredProperties.length / itemsPerPage);
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(filteredProperties.length / itemsPerPage); i++) {
+    pageNumbers.push(i);
+  }
 
   return (
     <Box>
-      <Grid container spacing={4} columns={12} mb={5}>
+      <Grid container spacing={2} columns={12} mb={5}>
         <Grid item xs={10}>
           <TextField
             label="Search Address"
             variant="outlined"
             fullWidth
+            size='small'
             value={addressSearch}
             onChange={handleAddressChange}
             sx={{ marginBottom: 2 }}
           />
         </Grid>
         <Grid item xs={2}>
-          <Button variant="contained" onClick={handleSearch} sx={{ height: '56px' }} fullWidth>Search Address</Button>
+          <Button variant="contained" size='small' onClick={handleSearch} sx={{ height: '40px' }} fullWidth>Search Address</Button>
         </Grid>
         <Grid item xs={3}>
           <TextField
             label="Min Bedrooms"
             variant="outlined"
             type="number"
+            size='small'
             value={bedroomsFilter}
             onChange={(e) => handleFilterChange(e, 'bedrooms')}
             // 
@@ -90,6 +110,7 @@ export default function ImgMediaCard() {
             label="Min Bathrooms"
             variant="outlined"
             type="number"
+            size='small'
             value={bathroomsFilter}
             onChange={(e) => handleFilterChange(e, 'bathrooms')}
             // 
@@ -101,6 +122,7 @@ export default function ImgMediaCard() {
             label="From Price"
             variant="outlined"
             type="number"
+            size='small'
             value={fromPriceFilter}
             onChange={(e) => handleFilterChange(e, 'fromPrice')}
             // 
@@ -112,6 +134,7 @@ export default function ImgMediaCard() {
             label="To Price"
             variant="outlined"
             type="number"
+            size='small'
             value={toPriceFilter}
             onChange={(e) => handleFilterChange(e, 'toPrice')}
             // 
@@ -121,13 +144,14 @@ export default function ImgMediaCard() {
       </Grid>
 
       <Grid container spacing={4}>
-        {filteredProperties.map((property) => (
+        {currentItems.map((property) => (
           <Grid item key={property.id} xs={12} sm={6} md={4}>
-            <Card sx={{ borderRadius: '15px', maxHeight: 400, width: "100%" }} >
+            <Card sx={{ borderRadius: '15px', maxHeight: 400, width: "100%" }}>
               <CardMedia
                 component="img"
                 alt="Property Image"
                 image={property.photo}
+                sx={{ height: 160 }}
               />
               <CardContent>
                 <Typography gutterBottom variant="h7" component="div" fontWeight={'bolder'}>
@@ -145,6 +169,20 @@ export default function ImgMediaCard() {
           </Grid>
         ))}
       </Grid>
+
+      {/* Pagination Controls */}
+      <Box display="flex" justifyContent="center" mt={2}>
+        <Pagination
+          count={pageCount}
+          page={currentPage}
+          onChange={handlePageChange}
+          showFirstButton
+          showLastButton
+          color="primary"
+          // Use this prop to add some margin between the page number buttons
+          sx={{ '.MuiPaginationItem-root': { margin: '0 4px' } }}
+        />
+      </Box>
     </Box>
   );
 }
